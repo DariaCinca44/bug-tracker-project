@@ -12,12 +12,12 @@
 |-< XPChangeLog     (userId)
 
 [Project]
-`|-< ProjectMember   (projectId)
+|-< ProjectMember   (projectId)
 |-< Bug             (projectId)`
 
 [Bug]
-`|-< BugComment       (bugId)
-|-< BugStatusHistory (bugId)`
+|-< BugComment       (bugId)
+|-< BugStatusHistory (bugId)
 ```
 
 ## Legendă 
