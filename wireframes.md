@@ -98,7 +98,7 @@ Acest document descrie paginile aplicației și elementele vizuale principale, c
 
 ---
 
-## 6️⃣ **Profile Page**
+## 6️⃣ **Profile Page **
 
 **Elemente wireframe:**
 
