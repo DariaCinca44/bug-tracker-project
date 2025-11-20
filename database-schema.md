@@ -13,7 +13,7 @@
 
 [Project]
 |-< ProjectMember   (projectId)
-|-< Bug             (projectId)`
+|-< Bug             (projectId)
 
 [Bug]
 |-< BugComment       (bugId)

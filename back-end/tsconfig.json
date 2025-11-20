@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es2020", //versiunea de JS
+        "module": "commonjs", //modul in care sunt gestionate imp/exp in node.js
+        "outDir": "dist", //unde se vor salva fisierele .js
+        "rootDir": "src", //unde se vor cauta fisierele .ts
+        "strict": true, // verificari mai stricte
+        "esModuleInterop": true, //import express from 'express' (usureaza scrierea)
+        "skipLibCheck": true // ignora erorile din pachetele externe
+    },
+    "include": ["src"] //compileaza doar fisiere din folderul src
+}
