@@ -1,3 +1,11 @@
+// acest fisier configureaza aplicatia Express: 
+// - incarca variabilele
+// - aplica middleware-uri globale precum CORS, JSON
+// - defineste /api/health
+// - conecteaza routerul principal
+// - gestioneaza rutele inexistente
+// - ataseaza handler-ul global de erori
+
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv';

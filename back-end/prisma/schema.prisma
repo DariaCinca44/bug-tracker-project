@@ -4,9 +4,11 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// ---------------SCHEMA PRISMA --------------
+// acest fisier contine toate tabelele, enumurile si relatiile din BD PostgreSQL
+
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -14,13 +16,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//rolul utilizatorilor
+//--------- enumuri ---------
+//sunt folosite pentru validare pentru rolul utilizatorilor ,severitatea unui bug
+// statusul curent al unui bug in workflow si tipurile de notificari trimise utilizatorilor
 enum MemberRole {
   MP
   TST
 }
 
-//severitatea unui bug
 enum BugSeverity {
   LOW
   MEDIUM
@@ -28,7 +31,6 @@ enum BugSeverity {
   CRITICAL
 }
 
-//prioritatea de rezolvare a bug-ului
 enum BugPriority {
   LOW
   MEDIUM
@@ -36,7 +38,6 @@ enum BugPriority {
   URGENT
 }
 
-//starea curenta a bug-ului
 enum BugStatus {
   OPEN
   IN_PROGRESS
@@ -44,7 +45,6 @@ enum BugStatus {
   CLOSED
 }
 
-//tipul de notificari
 enum NotificationType {
   BUG_REPORTED
   BUG_ASSIGNED
@@ -52,71 +52,83 @@ enum NotificationType {
   GENERIC
 }
 
-//tabela USER
+//--------- tabela USER ---------
+//folosita pentru definirea atributelor unui utilizator
+
 model User {
   id           String   @id @default(uuid()) //primary-key
-  email        String   @unique
-  passwordHash String
+  email        String   @unique              // email unic
+  passwordHash String                        
   name         String
-  xp           Int      @default(0)
-  level        Int      @default(1)
-  createdAt    DateTime @default(now()) //timestamp automat la inserare
-  updatedAt    DateTime @updatedAt
+  xp           Int      @default(0)           
+  level        Int      @default(1)           
+  createdAt    DateTime @default(now())       //timestamp automat la inserare
+  updatedAt    DateTime @updatedAt            // timestamp automat la update
 
   //relatiile 1-N
 
-  projectsCreated Project[]          @relation("ProjectsCreated")
-  memberships     ProjectMember[]
-  bugsReported    Bug[]              @relation("BugsReported")
-  bugsAssigned    Bug[]              @relation("BugsAssigned")
-  comments        BugComment[]
-  statusActions   BugStatusHistory[] @relation("StatusChangedBy")
-  notifications   Notification[]
-  xpLogs          XPChangeLog[]
+  projectsCreated Project[]          @relation("ProjectsCreated") // 1 user -> N proiecte create
+  memberships     ProjectMember[]                                 // N proiecte -> N useri (tabele intermediare)
+  bugsReported    Bug[]              @relation("BugsReported")    // 1 user -> N buguri raportate
+  bugsAssigned    Bug[]              @relation("BugsAssigned")    // 1 user -> N buguri asignate
+  comments        BugComment[]                                    // 1 user -> N comentarii
+  statusActions   BugStatusHistory[] @relation("StatusChangedBy") // 1 user -> N schimbar status
+  notifications   Notification[]                                  // 1 user -> N notificari
+  xpLogs          XPChangeLog[]                                   // 1 user -> N log XP
 }
 
-//tabela PROJECT
+//--------- tabela PROJECT ---------
+//folosita pentru definirea atributelor unui proiect
+
 model Project {
-  id          String   @id @default(uuid()) //primary-key
+  id          String   @id @default(uuid()) 
   name        String
   description String?
-  repoUrl     String
+  repoUrl     String                          // link catre repo github
   createdById String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  //foreign-key
-  createdBy User @relation("ProjectsCreated", fields: [createdById], references: [id], onDelete: Cascade)
-  members   ProjectMember[]
-  bugs      Bug[]
+  //relatiile 1-N ( 1 user -> N proiecte)
 
-  @@index([createdById])
+  createdBy User @relation("ProjectsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+
+  //foreign-key 
+
+  members   ProjectMember[] // N membri intr-un proiect
+  bugs      Bug[]  // N buguri intr-un proiect
+
+  @@index([createdById])  // pt integorari rapide dupa user
 }
 
-//tabela PROJECTMEMBER
+//--------- tabela PROJECTMEMBER ---------
+//folosita pentru definirea atributelor unui membru de proiect (legatura dintre user si proiect)
+
 model ProjectMember {
-  id        String     @id @default(uuid()) //primary-key
+  id        String     @id @default(uuid()) 
   projectId String
   userId    String
   role      MemberRole
   createdAt DateTime   @default(now())
 
-  //foreign-key
+  //relatiile 1-N 
 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade) // N MP -> 1 proiect
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade) // N proiecte -> 1 user
 
-  @@unique([projectId, userId])
-  @@index([userId])
-  @@index([projectId])
+  @@unique([projectId, userId]) // un user nu poate fi de 2 ori in acelasi proiect
+  @@index([userId]) //cautare rapida dupa user
+  @@index([projectId]) //cautare rapida dupa proiect
 }
 
-//tabela BUG
+//--------- tabela BUG ---------
+//folosita pentru definirea atributelor unui bug raportat in proiect
+
 model Bug {
-  id          String      @id @default(uuid()) //primary-key
+  id          String      @id @default(uuid()) 
   projectId   String
-  reporterId  String
-  assignedId  String?
+  reporterId  String      //userul care a raportat bugul
+  assignedId  String?     // userul care rezolva bugul
   title       String
   description String
   severity    BugSeverity
@@ -126,30 +138,35 @@ model Bug {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  //foreign-key
-  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  reporter User    @relation("BugsReported", fields: [reporterId], references: [id])
-  assigned User?   @relation("BugsAssigned", fields: [assignedId], references: [id])
+   //relatii 1-N
 
-  //relatii 1-N
+  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade) // N buguri -> 1 proiect
+  reporter User    @relation("BugsReported", fields: [reporterId], references: [id]) // N buguri -> 1 user care raporteaza
+  assigned User?   @relation("BugsAssigned", fields: [assignedId], references: [id]) // N buguri -> 1 user care rezolva
+
+  //foreign-keys
+
   comments  BugComment[]
   history   BugStatusHistory[]
   xpChanges XPChangeLog[]      @relation("BugXPChanges")
 
-  @@index([projectId])
+  @@index([projectId]) 
   @@index([status, priority])
   @@index([assignedId])
 }
 
-//tabela BUGCOMMENT
+//--------- tabela BUGCOMMENT ---------
+//folosita pentru definirea atributelor unui comentariu adaugat la bug
+
 model BugComment {
-  id        String   @id @default(uuid()) //primary-key
+  id        String   @id @default(uuid()) 
   bugId     String
   authorId  String
   content   String
   createdAt DateTime @default(now())
 
-  //foreign-key
+  //relatiile 1-N
+
   bug    Bug  @relation(fields: [bugId], references: [id], onDelete: Cascade)
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
@@ -157,9 +174,11 @@ model BugComment {
   @@index([authorId])
 }
 
-//tabela BUGSTATUSHISTORY
+//--------- tabela BUGSTATUSHISTORY ---------
+//folosita pentru definirea atributelor unui log din istoricul statusurilor
+
 model BugStatusHistory {
-  id          String     @id @default(uuid()) //primary-key
+  id          String     @id @default(uuid()) 
   bugId       String
   changedById String
   fromStatus  BugStatus?
@@ -168,7 +187,7 @@ model BugStatusHistory {
   note        String?
   createdAt   DateTime   @default(now())
 
-  //foreign-key
+  //relatii 1-N
   bug       Bug  @relation(fields: [bugId], references: [id], onDelete: Cascade)
   changedBy User @relation("StatusChangedBy", fields: [changedById], references: [id], onDelete: Cascade)
 
@@ -176,28 +195,36 @@ model BugStatusHistory {
   @@index([changedById])
 }
 
-//tabela NOTIFICATION
+//--------- tabela NOTIFICATION ---------
+//folosita pentru definirea atributelor unei notificari transmise utilizatorului
+
 model Notification {
-  id        String           @id @default(uuid()) //primary-key
+  id        String           @id @default(uuid())
   userId    String
   type      NotificationType
   message   String
-  readAt    DateTime?
+  readAt    DateTime?        //daca este null inseamna ca notificarea nu a fost citita
   createdAt DateTime         @default(now())
+
+  // relatie 1-N 
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, readAt])
 }
 
-//tabela XPCHANGELOG
+//--------- tabela XPCHANGELOG ---------
+//folosita pentru definirea atributelor unei schimbari ale XPului 
+
 model XPChangeLog {
-  id        String   @id @default(uuid()) //primary-key
+  id        String   @id @default(uuid()) 
   userId    String
-  delta     Int
+  delta     Int     //cate puncte XP s-ar adauga
   reason    String
   bugId     String?
   createdAt DateTime @default(now())
+
+  //relatii 1-N
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   bug  Bug? @relation("BugXPChanges", fields: [bugId], references: [id], onDelete: SetNull)

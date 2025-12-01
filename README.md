@@ -32,3 +32,66 @@ _Bug Tracker_ este o aplicație web destinată echipelor care vor să urmăreasc
 - Comentarii și istoric de statusuri
 - Sistem XP & Level pentru gamificare
 - Notificări în timp real pentru acțiuni importante
+
+---
+
+## 🚀 Instalare și rulare
+
+-> Acești pași permit configurarea și pornirea serverului backend pe un mediu local
+
+1. Instalarea dependențelor 
+
+ - Instalează toate pachetele necesare proiectului (Express, Prisma, JWT, CORS și restul librăriilor esențiale)
+
+```
+npm install 
+```
+2. Configurarea variabilelor 
+
+ - În folderul `back-end` creați un fișier `.env` , care conține datele de conectare la BD și de configurare a serverului, conform structurii: 
+
+```
+DATABASE_URL="postgresql://USERNAME:PASSWORD@localhost:5432/bugtracker?schema=public"
+PORT=3000 
+FRONTEND_ORIGIN=http://localhost:5173
+JWT_SECRET="introduceti_un_cod_secret"
+```
+- variabilele `USERNAME` și `PASSWORD` trebuie înlocuite cu datele date de PostgreSQL pe dispozitivul local
+
+3. Aplicarea migrărilor PRISMA
+
+- Rulați pentru a genera structura completă a BD : 
+
+```
+npx prisma migrate dev
+```
+
+4. Pornirea serverului în modul development
+
+- Pornirea serverului Node.js : 
+
+```
+npm run dev
+```
+
+-> după acești pași, serverul ruleaza la `http://localhost:3000`
+
+
+---
+
+## 🧪 Testarea API-ului in POSTMAN
+
+-> Pentru a testa backend-ul manual trebuie să executați următorii pași:
+
+- Toate rutele backend-ului încep cu:
+```
+http://localhost:3000/api
+```
+
+- Rularea `POST /api/auth/login` duce la obținerea token-ului JWT folosit în rutele protejate
+
+- Pentru a accesa rutele protejate se vor folosi următoarele în `HEADER`:
+```
+Key : Authorization
+Value: Bearer <token_JWT>
+```
