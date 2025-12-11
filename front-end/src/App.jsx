@@ -1,27 +1,26 @@
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
+import BugDetailsPage from "./pages/BugDetailsPage";
+import AddBugPage from "./pages/AddBugPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisterPage from "./pages/RegisterPage";
+import ProjectPage from "./pages/ProjectPage";
+
 
 function App() {
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1 className="title">🐞 Bug Tracker</h1>
-        <p className="subtitle">Please log in to your account</p>
-
-        <form>
-          <label>Email:</label>
-          <input type="email" placeholder="Enter your email" />
-
-          <label>Password:</label>
-          <input type="password" placeholder="Enter your password" />
-
-          <button type="submit">Log In</button>
-        </form>
-
-        <p className="signup-text">
-          Don’t have an account? <a href="#">Sign up</a>
-        </p>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/bug/:id" element={<BugDetailsPage />} />
+        <Route path="/add-bug" element={<AddBugPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/project/:id" element={<ProjectPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

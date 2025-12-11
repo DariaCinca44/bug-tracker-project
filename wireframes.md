@@ -19,20 +19,12 @@ Acest document descrie paginile aplicației și elementele vizuale principale, c
 
 ## 1️⃣ **Login Page**
 
-<<<<<<< HEAD
-**Elemente wireframe: **
-=======
 **Elemente wireframe:**
->>>>>>> upstream/main
 
 - Câmpuri: Email, Parolă
 - Buton „Login”
 - Link „Register” pentru creare cont nou
-<<<<<<< HEAD
-- Mesaj eroare (invalid credentials)
-=======
 - Mesaj eroare (credentiale invalide)
->>>>>>> upstream/main
 
 **Scop:** acces în aplicație
 
@@ -42,11 +34,7 @@ Acest document descrie paginile aplicației și elementele vizuale principale, c
 
 **Elemente wireframe:**
 
-<<<<<<< HEAD
-- Listă de proiecte
-=======
 - Listă de proiecte (afișate ca _carduri_)
->>>>>>> upstream/main
   - Nume proiect
   - Număr bug-uri
   - Status (active / inactive)
@@ -101,11 +89,7 @@ Acest document descrie paginile aplicației și elementele vizuale principale, c
 - Descriere completă
 - Severitate, Prioritate
 - Status curent
-<<<<<<< HEAD
-- Buton „Asignează mie” (pentru membri), doar dacă nu e deja asignat
-=======
 - Buton „Asignează mie” (pentru membri), doar dacă bug-ul nu este asignat
->>>>>>> upstream/main
 - Istoric statusuri (timeline)
 - Comentarii
 - Link commit rezolvare
@@ -114,11 +98,7 @@ Acest document descrie paginile aplicației și elementele vizuale principale, c
 
 ---
 
-<<<<<<< HEAD
-## 6️⃣ **Profile Page **
-=======
 ## 6️⃣ **Profile Page**
->>>>>>> upstream/main
 
 **Elemente wireframe:**
 

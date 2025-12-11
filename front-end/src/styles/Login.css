@@ -6,12 +6,10 @@ html, body {
   overflow: hidden;
   background-color: #0e0e16;
 }
-
-
 /* ======= FUNDAL + CARD ======= */
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1e1e2e; /* ca tema VS Code dark */
+  background-color: #1e1e2e; 
   margin: 0;
   color: #e0e0e0;
 }
@@ -25,7 +23,7 @@ body {
 }
 
 .login-card {
-  background: #2a2a40; /* mai deschis decât fundalul, ca un panou */
+  background: #2a2a40;
   padding: 60px 50px;
   border-radius: 18px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -45,8 +43,9 @@ body {
   background: linear-gradient(90deg, #7c3aed, #3068c8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  align-items: center;
   line-height: 1.5;
+  background-clip: text;
+  text-align: center;
 }
 
 .subtitle {
@@ -118,97 +117,4 @@ body {
 
 .signup-text a:hover {
   text-decoration: underline;
-}
-/* ===== DASHBOARD STRUCTURE ===== */
-
-.sidebar-title {
-  font-size: 18px;
-  color: #8ab4f8;
-  margin-bottom: 15px;
-}
-
-.project-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  flex: 1;
-}
-
-.project-item {
-  background-color: #1f1f33;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  color: #c0c0c0;
-  transition: all 0.2s ease;
-}
-
-.project-item.active,
-.project-item:hover {
-  background: linear-gradient(90deg, #7c3aed, #3b82f6);
-  color: #fff;
-}
-
-.add-project-btn {
-  margin-top: 10px;
-  padding: 10px;
-  border: none;
-  background: linear-gradient(90deg, #3b82f6, #7c3aed);
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* ===== DASHBOARD STRUCTURE ===== */
-
-/* Bugs table */
-.bug-section h2 {
-  color: #8ab4f8;
-}
-
-.bug-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.status {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.status.resolved {
-  background-color: #1b4024;
-  color: #61f28f;
-}
-
-.status.open {
-  background-color: #402020;
-  color: #ff6b6b;
-}
-.project-table {
-  width: 100%;
-  border-collapse: collapse;
-  color: #e0e0e0;
-  margin-top: 10px;
-}
-
-.project-table th {
-  text-align: left;
-  padding: 10px 12px;
-  color: #8ab4f8;
-  border-bottom: 1px solid #2a2a40;
-}
-
-.project-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #24243d;
-}
-
-.project-table tr:hover {
-  background-color: #1b1b2d;
 }

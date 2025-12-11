@@ -1,0 +1,234 @@
+/* GENERAL LAYOUT */
+.dashboard-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0c0f1a;
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+/* ---------------- SIDEBAR ---------------- */
+.sidebar {
+  width: 250px;
+  background-color: #111425;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.sidebar-title {
+  margin-bottom: 20px;
+  opacity: 0.7;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.sidebar-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-project-btn {
+  background-color: #1b1e35;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar-project-btn:hover {
+  background-color: #272b45;
+}
+
+.sidebar-add-btn {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid #7a5af5;
+  color: #cfcaff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar-add-btn:hover {
+  background-color: #7a5af5;
+  color: white;
+}
+
+/* ---------------- MAIN CONTENT ---------------- */
+.main-content {
+  flex: 1;
+  padding: 40px;
+}
+
+.main-title {
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.project-card {
+  background-color: #14182b;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.project-card:hover {
+  background-color: #1f2340;
+}
+
+.project-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.project-card p {
+  margin: 5px 0;
+  opacity: 0.7;
+}
+
+.project-repo {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ---------------- RIGHT PANEL ---------------- */
+.right-panel {
+  width: 280px;
+  background-color: #111425;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* USER BOX */
+.user-box {
+  background-color: #14182b;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 18px;
+}
+
+.user-level {
+  margin: 3px 0 10px;
+  opacity: 0.7;
+}
+
+/* XP BAR */
+.xp-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #2b304a;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.xp-fill {
+  height: 8px;
+  background-color: #7a5af5;
+  border-radius: 5px;
+}
+
+.xp-text {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* NOTIFICATIONS */
+.notifications-box {
+  background-color: #14182b;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.notif-title {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.notif-item {
+  background-color: #1c2038;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.notif-item:hover {
+  background-color: #272b45;
+}
+
+/* Sidebar container */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden; 
+}
+
+
+/* Listă proiecte */
+.sidebar-projects {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-bottom: 20px; 
+}
+
+/* Cutie SEPARATĂ pentru formular */
+.sidebar-bottom {
+  padding: 15px 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 20px;
+}
+
+/* Formular */
+.sidebar-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-add-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #2a2a40;
+  background-color: #121629;
+  color: white;
+  font-size: 14px;
+}
+
+.sidebar-add-form button {
+  background: linear-gradient(90deg, #7a5af5, #4f46e5);
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+}
