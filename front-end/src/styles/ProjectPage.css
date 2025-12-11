@@ -1,0 +1,51 @@
+.projects-container {
+  padding: 40px;
+  color: white;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.project-item {
+  background: #14182b;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.project-item button {
+  margin-top: 10px;
+  background: #7a5af5;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-project-form {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #111425;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.add-project-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.add-project-form button {
+  margin-top: 10px;
+  background: #4f46e5;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
