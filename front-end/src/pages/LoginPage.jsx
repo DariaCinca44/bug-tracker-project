@@ -19,7 +19,7 @@ function LoginPage() {
 
       localStorage.setItem("token", res.data.token);
       window.location.href = "/dashboard";
-    } catch (err) {
+    } catch  {
       setError("Email sau parola invalida");
     }
   };

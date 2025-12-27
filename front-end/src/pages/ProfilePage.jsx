@@ -1,17 +1,33 @@
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
-  const user = {
-    name: "Daria",
-    email: "daria@email.com",
-    level: 2,
-    title: "Debugger Pro ",
-    xp: 120,
-    projects: [
-      { id: 1, name: "Project A" },
-      { id: 2, name: "Project B" },
-    ],
-  };
+const [user, setUser] = useState(null);
+
+  // protectie
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      window.location.href = "/";
+    }
+  }, []);
+
+  // load user real
+  useEffect(() => {
+    api
+      .get("/users/me")
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch(() => {
+        alert("Eroare la incarcare profil");
+      });
+  }, []);
+
+  if (!user) {
+    return <p style={{ color: "white" }}>Loading...</p>;
+  }
+ 
 
   return (
     <div className="profile-page">
@@ -60,12 +76,14 @@ function ProfilePage() {
         {user.projects.map((project) => (
           <div key={project.id} className="project-card">
             <span>{project.name}</span>
-            <button className="details-button">Vezi detalii</button>
+            <button className="details-button"onClick={() =>
+                (window.location.href = `/project/${project.id}`)
+              }>Vezi detalii</button>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
+ 
 export default ProfilePage;
