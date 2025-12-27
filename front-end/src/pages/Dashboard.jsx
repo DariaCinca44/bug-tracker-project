@@ -1,30 +1,45 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 import "../styles/Dashboard.css";
 
 function Dashboard() {
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      window.location.href = "/";
+    }
+  }, []);
+  
+  useEffect(() => {
+  api.get("/projects")
+    .then((res) => {
+      console.log("RES.DATA =", res.data);
+      setProjects(res.data);
+    })
+    .catch(() => {
+      console.log("Eroare la incarcare proiecte");
+    });
+}, []);
 
-  // MOCK PROJECTS
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: "Project Alpha",
-      description: "Authentication module refactor.",
-      repositoryUrl: "https://github.com/test/project-alpha",
-    },
-    {
-      id: 2,
-      name: "Project Beta",
-      description: "UI redesign and components.",
-      repositoryUrl: "https://github.com/test/project-beta",
-    },
-    {
-      id: 3,
-      name: "Project Gamma",
-      description: "API performance improvements.",
-      repositoryUrl: "https://github.com/test/project-gamma",
-    },
-  ]);
+   const handleAddProject = async (e) => {
+    e.preventDefault();
 
+    const name = e.target.name.value;
+    const repositoryUrl = e.target.repo.value;
+
+    try {
+      const res = await api.post("/projects", {
+        name,
+        description: "Project created from dashboard",
+        repoUrl: repositoryUrl
+      });
+
+      setProjects([...projects, res.data.project]);
+      e.target.reset();
+    } catch {
+      alert("Eroare la creare proiect");
+    }
+  };
   return (
     <div className="dashboard-container">
 
@@ -49,22 +64,7 @@ function Dashboard() {
   <div className="sidebar-bottom">
     <form
       className="sidebar-add-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        const name = e.target.name.value;
-        const repo = e.target.repo.value;
-
-        const newProject = {
-          id: projects.length + 1,
-          name,
-          description: "New project added",
-          repositoryUrl: repo,
-        };
-
-        setProjects([...projects, newProject]);
-        e.target.reset();
-      }}
-    >
+      onSubmit={handleAddProject}>
       <input name="name" placeholder="Project Name" required />
       <input name="repo" placeholder="Repository URL" required />
       <button type="submit">+ Add Project</button>
@@ -89,7 +89,7 @@ function Dashboard() {
             >
               <h3>{project.name}</h3>
               <p>{project.description}</p>
-              <span className="project-repo">{project.repositoryUrl}</span>
+              <span className="project-repo">{project.repoUrl}</span>
             </div>
           ))}
         </div>

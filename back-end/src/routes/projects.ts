@@ -10,6 +10,25 @@ import { PrismaClient } from "@prisma/client";
 
 const router= Router();
 const prisma= new PrismaClient();
+router.get('/', requireAuth, async (req: any, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const projects = await prisma.project.findMany({
+      where: {
+        members: {
+          some: {
+            userId: userId
+          }
+        }
+      }
+    });
+
+    res.json(projects);
+  } catch (err) {
+    next(err);
+  }
+});
 
 //CREATE PROJECT -> orice user logat, devine automat MP in proiectul creat
 router

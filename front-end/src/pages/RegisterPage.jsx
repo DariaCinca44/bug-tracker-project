@@ -1,18 +1,37 @@
 import "../styles/Login.css";
 import { useState } from "react";
+import api from "../api/axios";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
+     const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      alert("Cont creat cu succes!");
+      window.location.href = "/";
+    } catch {
+      setError("Eroare la creare cont. Email deja folosit.");
+    }
+  };
   return (
     <div className="login-container">
       <div className="login-card">
         <h1 className="title">🐞 Bug Tracker</h1>
         <p className="subtitle">Create your account</p>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <label>Name:</label>
           <input
             type="text"
@@ -38,6 +57,7 @@ export default function RegisterPage() {
           />
 
           <button type="submit">Create Account</button>
+          {error && <p className="error">{error}</p>}
         </form>
 
         <p className="signup-text">

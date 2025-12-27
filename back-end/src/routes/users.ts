@@ -25,14 +25,27 @@ const router= Router();
                         email:true,
                         xp:true,
                         level:true,
-                        createdAt: true
+                        createdAt: true,
+                        memberships: {
+                        include: {
+                            project: true
+                        }
+                        }
                     }
                 })
                 if(!user){
                     throw{status: 404, message: 'User not found'};
                 }
                 
-                res.json(user);
+               res.json({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                xp: user.xp,
+                level: user.level,
+                projects: user.memberships.map(m => m.project)
+                });
+
             } catch(err){
                 next(err);
             }

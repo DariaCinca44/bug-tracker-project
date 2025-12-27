@@ -1,43 +1,28 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "../api/axios";
 import "../styles/Dashboard.css";
 
 function ProjectPage() {
   const { id } = useParams();
 
-  const [bugs] = useState(() => {
-  const storedBugs = JSON.parse(
-    localStorage.getItem(`project-${id}-bugs`)
-  );
+  const [bugs,setBugs] = useState([])
+   useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      window.location.href = "/";
+    }
+  }, []);
+  useEffect(() => {
+    api
+      .get(`/bugs/projects/${id}/bugs`)
+      .then((res) => {
+        setBugs(res.data);
+      })
+      .catch(() => {
+        alert("Eroare la incarcare bug-uri");
+      });
+  }, [id]);
 
-  const mockBugs=[
-    {
-      id: 1,
-      title: "Login error on mobile",
-      severity: "High",
-      priority: "High",
-      status: "Open",
-      assignee: null,
-    },
-    {
-      id: 2,
-      title: "Navbar alignment issue",
-      severity: "Medium",
-      priority: "Low",
-      status: "In Progress",
-      assignee: "Teodora",
-    },
-  ]
-  if (!storedBugs) {
-    localStorage.setItem(
-      `project-${id}-bugs`,
-      JSON.stringify(mockBugs)
-    );
-    return mockBugs;
-  }
-
-  return storedBugs;
-});
 
   return (
     <div className="dashboard-container">
@@ -62,15 +47,13 @@ function ProjectPage() {
 
       {/* MAIN CONTENT */}
       <main className="main-content">
-        <h1 className="main-title">Project #{id} — Bugs</h1>
+        <h1 className="main-title">Project  Bugs</h1>
 
         <div className="projects-grid">
           {bugs.map((bug) => (
             <div
               key={bug.id}
-              className="project-card"
-              onClick={() => (window.location.href = `/bug/${bug.id}`)}
-            >
+              className="project-card">
               <h3>{bug.title}</h3>
               <p>
                 Severity: <strong>{bug.severity}</strong> | Priority:{" "}
@@ -78,7 +61,7 @@ function ProjectPage() {
               </p>
               <p>Status: {bug.status}</p>
               <span className="project-repo">
-                Assigned to: {bug.assignee || "Unassigned"}
+                Assigned to: {bug.assignedId || "Unassigned"}
               </span>
             </div>
           ))}
@@ -89,7 +72,7 @@ function ProjectPage() {
       <aside className="right-panel">
         <div className="user-box">
           <h3 className="user-name">
-            {localStorage.getItem("username") || "User"}
+           User
           </h3>
           <p className="user-level">Level 3 — Bug Fixer</p>
 
