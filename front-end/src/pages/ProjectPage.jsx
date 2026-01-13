@@ -8,6 +8,15 @@ function ProjectPage() {
   const navigate = useNavigate();
   const [role, setRole] = useState(null); 
   const [bugs,setBugs] = useState([]);
+  const [members, setMembers] = useState([]);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    api.get("/users/me")
+      .then(res => setUserId(res.data.id))
+      .catch(() => {});
+  }, []);
+
 
    useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -17,29 +26,42 @@ function ProjectPage() {
 
   const joinAsTester = async () => {
   try {
-    await api.post(`/projects/${id}/join`,{ role: "TST" });
+    await api.post(`/projects/${id}/join`);
     setRole("TST");
     alert("You are now a tester in this project!");
   } catch  {
     alert( "Cannot join project");
   }
 };
-  const joinAsMP = async () => {
-    try {
-      await api.post(`/projects/${id}/join`, { role: "MP" });
-      setRole("MP");
-      alert("You are now a mp in this project!");
-    } catch {
-      alert("Cannot join as MP");
-    }
-  };
+  const promoteToMP = async (userId) => {
+  try {
+    await api.patch(`/projects/${id}/members/${userId}/promote`);
+    alert("User promoted to MP");
+
+    // refresh lista
+    const res = await api.get(`/projects/${id}`);
+    setMembers(res.data.members);
+  } catch{
+    alert("Cannot promote user");
+  }
+};
+
+  // const joinAsMP = async () => {
+  //   try {
+  //     await api.post(`/projects/${id}/join`, { role: "MP" });
+  //     setRole("MP");
+  //     alert("You are now a mp in this project!");
+  //   } catch {
+  //     alert("Cannot join as MP");
+  //   }
+  // };
 
 //aflam rol user
 useEffect(() => {
+  if (!userId) return;
   api.get(`/projects/${id}`)
     .then(res => {
-      const userId = localStorage.getItem("userId");
-      const member = res.data.members.find(m => m.userId === userId);
+      const member = res.data.members.find(m => m.user.id === userId);
       if (member) {
         setRole(member.role); // "MP" sau "TST"
       } else {
@@ -47,7 +69,7 @@ useEffect(() => {
       }
     })
     .catch(() => {});
-}, [id]);
+}, [id, userId]);
 
 useEffect(() => {
   if (role !== "MP" && role !== "TST") {
@@ -59,6 +81,17 @@ useEffect(() => {
     .then(res => setBugs(res.data))
     .catch(() => {});
 }, [id, role]);
+
+useEffect(() => {
+  if (role !== "MP") return;
+
+  api.get(`/projects/${id}`)
+    .then(res => {
+      setMembers(res.data.members);
+    })
+    .catch(() => {});
+}, [id, role]);
+
 
 
   return (
@@ -76,18 +109,25 @@ useEffect(() => {
 
         <div style={{ marginTop: "auto" }} />
 
-          {role === null && (
-            <button onClick={joinAsMP} className="sidebar-add-btn">
-              Join as MP
-            </button>
-          )}
-
-          {/* DACA ESTI MP */}
-          {role === "MP" && (
+        {role === null && (
             <button onClick={joinAsTester} className="sidebar-add-btn">
               Join as Tester
             </button>
           )}
+
+          {/* {role === null && (
+            <button onClick={joinAsMP} className="sidebar-add-btn">
+              Join as MP
+            </button>
+          )} */}
+
+          {/* DACA ESTI MP
+          {role === "MP" && (
+            <button onClick={joinAsTester} className="sidebar-add-btn">
+              Join as Tester
+            </button>
+          )} */}
+
             {role === "TST" && (
                 <button
                   className="sidebar-add-btn"
@@ -99,12 +139,12 @@ useEffect(() => {
           
 
 
-        <button
+        {/* <button
           className="sidebar-add-btn"
           onClick={() => (window.location.href = `/project/${id}/add-bug`)}
         >
           + Add Bug
-        </button>
+        </button> */}
       </aside>
 
       {/* MAIN CONTENT */}
@@ -152,6 +192,47 @@ useEffect(() => {
 
           <span className="xp-text">60 XP / 200 XP</span>
         </div>
+        {role === "MP" && (
+          <div className="user-box">
+            <h3 className="notif-title">Project Members</h3>
+
+            {members.map(m => (
+              <div
+                key={m.userId}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                  background: "#1c2038",
+                  padding: "8px",
+                  borderRadius: "8px"
+                }}
+              >
+                <span style={{ fontSize: "14px" }}>
+                  {m.user.name} — <strong>{m.role}</strong>
+                </span>
+
+                {m.role === "TST" && (
+                  <button
+                    onClick={() => promoteToMP(m.userId)}
+                    style={{
+                      background: "#6c63ff",
+                      border: "none",
+                      color: "white",
+                      padding: "4px 8px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "12px"
+                    }}
+                  >
+                    Promote
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="notifications-box">
           <h3 className="notif-title">Notifications</h3>

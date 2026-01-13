@@ -14,7 +14,7 @@ const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/projects", projectRoutes);
-router.use("/", bugRoutes);
+router.use("/bugs", bugRoutes);
 router.use("/users", userRoutes);
 
 export default router;

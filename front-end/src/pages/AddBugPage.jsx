@@ -30,9 +30,10 @@ useEffect(() => {
       }); 
 
      window.location.href = `/project/${projectId}`;
-    } catch {
-      alert("Eroare la creare bug");
-    }
+    } catch (err) {
+  console.log(err);
+  alert(err.response?.data?.message || "Eroare la creare bug");
+}
   };
 
   return (

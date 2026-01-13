@@ -41,6 +41,39 @@ router.get("/", requireAuth, async (req, res, next) => {
   }
 });
 
+// GET PROJECT BY ID -> cu membri + user
+router.get("/:id", requireAuth, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const project = await prisma.project.findUnique({
+      where: { id },
+      include: {
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      throw { status: 404, message: "Project not found" };
+    }
+
+    res.json(project);
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 //CREATE PROJECT -> orice user logat, devine automat MP in proiectul creat
 router
   .post("/", requireAuth, async (req, res, next) => {
@@ -205,6 +238,7 @@ router
       next(err);
     }
   });
+
 // LEAVE PROJECT -> userul iese din proiect (TST)
 router.delete("/:id/leave", requireAuth, async (req, res, next) => {
   try {
@@ -232,5 +266,91 @@ router.delete("/:id/leave", requireAuth, async (req, res, next) => {
     next(err);
   }
 });
+
+// GET bugs dintr-un proiect
+router.get("/:id/bugs", requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // verificam ca userul e membru
+    const member = await prisma.projectMember.findFirst({
+      where: {
+        projectId: id,
+        userId
+      }
+    });
+
+    if (!member) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const bugs = await prisma.bug.findMany({
+      where: { projectId: id },
+      orderBy: { createdAt: "desc" }
+    });
+
+    res.json(bugs);
+  } catch (err) {
+    res.status(500).json({ message: "Cannot load bugs" });
+  }
+});
+
+// PROMOTE MEMBER -> doar MP poate promova un TST la MP
+router.patch("/:projectId/members/:userId/promote", requireAuth, async (req, res, next) => {
+  try {
+    const { projectId, userId } = req.params;
+    const requesterId = req.user.id;
+
+    const requester = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId: requesterId,
+        role: "MP"
+      }
+    });
+
+    if (!requester) {
+      throw {
+        status: 403,
+        message: "Only MPs can promote users"
+      };
+    }
+
+    const member = await prisma.projectMember.findFirst({
+      where: {
+        projectId,
+        userId
+      }
+    });
+
+    if (!member) {
+      throw {
+        status: 404,
+        message: "User not found in project"
+      };
+    }
+
+    if (member.role === "MP") {
+      throw {
+        status: 400,
+        message: "User is already MP"
+      };
+    }
+
+    const updated = await prisma.projectMember.update({
+      where: { id: member.id },
+      data: { role: "MP" }
+    });
+
+    res.json({
+      message: "User promoted to MP",
+      member: updated
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 export default router;
