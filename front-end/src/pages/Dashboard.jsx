@@ -78,69 +78,6 @@ useEffect(() => {
 
       {/* SIDEBAR */}
       <aside className="sidebar">
-  <h3 className="sidebar-title">PROJECTS</h3>
-
-  {/* LISTA PROoj*/}
-  <div className="sidebar-projects">
-    {projects.map((project) => (
-      <button
-        key={project.id}
-        className="sidebar-project-btn"
-        onClick={() => (window.location.href = `/project/${project.id}`)}
-      >
-        {project.name}
-      </button>
-    ))}
-  </div>
-
-  {/* addProject */}
-  <div className="sidebar-bottom">
-    <form
-      className="sidebar-add-form"
-      onSubmit={handleAddProject}>
-      <input name="name" placeholder="Project Name" required />
-      <input name="description" placeholder="Descriere" />
-      <input name="repo" placeholder="Repository URL GitHub" required />
-      <button type="submit">+ Add Project</button>
-    </form>
-  </div>
-</aside>
-
-
-      {/* MAIN CONTENT */}
-      <main className="main-content">
-        <h1 className="main-title">Dashboard</h1>
-
-        
-
-        {/* PROJECT CARDS */}
-        <div className="projects-grid">
-          {projects.map((project) => (
-            <div
-              key={project.id}
-              className="project-card"
-              onClick={() => (window.location.href = `/project/${project.id}`)}
-            >
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
-              <span className="project-repo">{project.repoUrl}</span>
-          
-            {project.createdById === userId && (
-              <button
-                className="delete-project-btn"
-                onClick={(e) => handleDeleteProject(e, project.id)}
-              >
-                Delete
-              </button>
-            )}
-            </div>
-          ))}
-          </div>
-        
-      </main>
-
-      {/* RIGHT PANEL */}
-      <aside className="right-panel">
 
         {/* USER XP BOX */}
         <div
@@ -173,14 +110,78 @@ useEffect(() => {
           </div>
 
 
-        {/* NOTIFICATIONS */}
-        <div className="notifications-box">
-          <h3 className="notif-title">Notifications</h3>
-          <div className="notif-item">New bug reported</div>
-          <div className="notif-item">Bug resolved</div>
-          <div className="notif-item">Bug reopened</div>
-        </div>
-      </aside>
+  {/* addProject */}
+  <div className="sidebar-bottom">
+    <form
+      className="sidebar-add-form"
+      onSubmit={handleAddProject}>
+      <input name="name" placeholder="Project Name" required />
+      <input name="description" placeholder="Descriere" />
+      <input name="repo" placeholder="Repository URL GitHub" required />
+      <button type="submit">+ Add Project</button>
+    </form>
+  </div>
+</aside>
+
+
+      {/* MAIN CONTENT */}
+      <main className="main-content">
+        <h1 className="main-title">Dashboard</h1>
+
+        
+
+        {/* PROJECT CARDS */}
+        <div className="projects-grid">
+          {projects.map((project) => (
+            // <div
+            //   key={project.id}
+            //   className="project-card"
+            //   onClick={() => (window.location.href = `/project/${project.id}`)}
+            // >
+            //   <h3>{project.name}</h3>
+            //   <p>{project.description}</p>
+            //   <span className="project-repo">{project.repoUrl}</span>
+          
+            // {project.createdById === userId && (
+            //   <button
+            //     className="delete-project-btn"
+            //     onClick={(e) => handleDeleteProject(e, project.id)}
+            //   >
+            //     Delete
+            //   </button>
+            // )}
+            // </div>
+            <div
+  key={project.id}
+  className="project-card"
+  onClick={() => (window.location.href = `/project/${project.id}`)}
+>
+  {/* PARTEA STANGA */}
+  <div className="project-main">
+    <h3>{project.name}</h3>
+    <p>{project.description}</p>
+  </div>
+
+  {/* PARTEA DREAPTA */}
+  <div className="project-actions">
+    <span className="project-repo">{project.repoUrl}</span>
+
+    {project.createdById === userId && (
+      <button
+        className="delete-project-btn"
+        onClick={(e) => handleDeleteProject(e, project.id)}
+      >
+        Delete
+      </button>
+    )}
+  </div>
+</div>
+
+          ))}
+          </div>
+        
+      </main>
+
     </div>
   );
 }
