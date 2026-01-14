@@ -118,6 +118,22 @@ function BugDetailsPage() {
         </span>
       </div>
 
+    {bug.status === "RESOLVED" && bug.commitUrl && (
+      <div className="resolved-commit-box">
+        <p className="commit-label">Link commit:</p>
+        <a
+          href={bug.commitUrl.startsWith("http") ? bug.commitUrl : `https://${bug.commitUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="commit-link-display"
+        >
+          <div className="commit-link-content">
+            <span className="commit-url-text">{bug.commitUrl}</span>
+          </div>
+          <span className="arrow-icon">→</span>
+        </a>
+      </div>
+    )}
       <div className="comments-section" id="comments">
         <h2 className="comments-title">Comments</h2>
 

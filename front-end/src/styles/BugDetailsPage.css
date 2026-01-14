@@ -227,3 +227,56 @@
 .comments-list::-webkit-scrollbar-thumb:hover {
   background-color: #6c63ff;
 }
+
+.resolved-commit-box {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.commit-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4ade80; 
+  margin: 0;
+  opacity: 0.9;
+}
+
+.commit-link-display {
+  background: rgba(74, 222, 128, 0.05);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+  color: #4ade80;
+  transition: all 0.2s ease;
+}
+
+.commit-link-display:hover {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: #4ade80;
+  transform: translateY(-2px);
+}
+
+.commit-link-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 90%;
+}
+
+.commit-url-text {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow-icon {
+  opacity: 0.5;
+  font-size: 16px;
+}
