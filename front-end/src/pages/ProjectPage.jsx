@@ -146,6 +146,10 @@ useEffect(() => {
       {/* MAIN CONTENT */}
       <main className="main-content">
         <h1 className="main-title">Project  Bugs</h1>
+        <p className="project-bugs-hint">
+          ⚠️pentru a vedea sectiunea de comentarii apasa pe Bug⚠️<br></br>
+        </p>
+
         {role===null && (
           <p style={{ color: "gray", marginTop: "20px" }}>
             You must join this project as Tester to see bugs.

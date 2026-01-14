@@ -1,24 +1,28 @@
 .bug-details-page {
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   background: linear-gradient(180deg, #0c0f1a, #070914);
   color: white;
+  padding: 40px 0 140px; 
+  overflow-y: auto;
 }
 
 /* CARD */
 .bug-card {
   background-color: #14182b;
-  padding: 40px;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px;
   border-radius: 18px;
-  width: 600px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
+
 
 /* TITLU */
 .bug-title {
@@ -141,4 +145,85 @@
 
 .commit-input:focus {
   border-color: #7a5af5;
+}
+.comments-section {
+  margin-top: 6px;
+}
+
+.comments-title {
+  margin-bottom: 16px;
+}
+
+.comment-card {
+  background: #1c2038;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-content {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.add-comment {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.add-comment textarea {
+  resize: none;
+  min-height: 40px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #11152a;
+  color: white;
+}
+
+.add-comment button {
+  align-self: flex-end;
+}
+.comment-btn {
+  align-self: flex-end;
+  background: #1c2038;
+  color: white;
+  border: 1px solid #2a2f55;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.comment-btn:hover {
+  background: #2a2f55;
+  border-color: #6c63ff;
+}
+.comments-list {
+  max-height: 260px;       
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+.comments-list::-webkit-scrollbar-thumb {
+  background-color: #2a2f55;
+  border-radius: 6px;
+}
+.comments-list::-webkit-scrollbar-thumb:hover {
+  background-color: #6c63ff;
 }
