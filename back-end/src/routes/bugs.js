@@ -75,7 +75,12 @@ router
 
             const bugs = await prisma.bug.findMany({
                 where: status ? {projectId, status} : {projectId},
-                orderBy: {createdAt: "desc"}
+                include: {
+                    assigned: {
+                    select: { id: true, name: true }
+                    }
+                },
+                orderBy: { createdAt: "desc" }
             })
             res.json(bugs);
         } catch (err){
@@ -127,6 +132,13 @@ router
                 throw {status: 404, message: 'Bug not found'};
             }
 
+            if (bug.status !== "OPEN" || bug.assignedId) {
+                throw {
+                    status: 400,
+                    message: "Bug is already assigned"
+                };
+                }
+
             const member= await prisma.projectMember.findFirst({
                 where: {projectId: bug.projectId, userId, role: 'MP'}
             })
@@ -176,6 +188,20 @@ router
             if(!member){
                 throw{ status: 403, message: 'Only MPs can update bug status'};
             }
+
+            if (status === "IN_PROGRESS" && bug.status !== "OPEN") {
+                throw {
+                    status: 400,
+                    message: "Bug can move to IN_PROGRESS only from OPEN"
+                };
+                }
+
+                if (status === "RESOLVED" && bug.status !== "IN_PROGRESS") {
+                throw {
+                    status: 400,
+                    message: "Bug must be IN_PROGRESS to be resolved"
+                };
+                }
 
             if(status=== "RESOLVED"){
                 if(!bug.assignedId){

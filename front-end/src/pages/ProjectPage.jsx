@@ -12,6 +12,8 @@ function ProjectPage() {
   const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const [project, setProject] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
 
   const openEditForm = () => {
   navigate(`/project/${id}/edit`);
@@ -32,6 +34,13 @@ function ProjectPage() {
       window.location.href = "/";
     }
   }, []);
+
+  useEffect(() => {
+  api.get("/notifications")
+    .then(res => setNotifications(res.data))
+    .catch(() => {});
+  }, []);
+
 
   const joinAsTester = async () => {
   try {
@@ -157,7 +166,11 @@ useEffect(() => {
               </p>
               <p>Status: {bug.status}</p>
               <span className="project-repo">
-                Assigned to: {bug.assignedId || "Unassigned"}
+                {bug.status === "RESOLVED"
+                  ? "Done"
+                  : bug.assignedId
+                    ? "Assigned"
+                    : "Unassigned"}
               </span>
             </div>
           ))}
@@ -238,12 +251,32 @@ useEffect(() => {
           </div>
         )}
 
-        <div className="notifications-box">
-          <h3 className="notif-title">Notifications</h3>
-          <div className="notif-item">Bug updated</div>
-          <div className="notif-item">New bug assigned to you</div>
-          <div className="notif-item">Bug resolved</div>
-        </div>
+          <div className="notifications-box">
+    <h3 className="notif-title">Your history</h3>
+    
+
+    {notifications.length === 0 && (
+      <p style={{ color: "#94a3b8", fontSize: "14px" }}>
+        Let's start!
+      </p>
+    )}
+
+    {notifications.map(n => (
+      <div
+        key={n.id}
+        className={`notif-item ${n.readAt ? "read" : "unread"}`}
+        onClick={() => {
+          api.patch(`/notifications/${n.id}/read`);
+          setNotifications(prev =>
+              prev.filter(x => x.id !== n.id)
+          );
+        }}
+        >
+          {n.message}
+      </div>
+    ))}
+</div>
+
       </aside>
     </div>
   );

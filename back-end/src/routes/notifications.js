@@ -12,7 +12,7 @@ router
             const userId= req.user.id;
 
             const notifications = await prisma.notification.findMany({
-                where:{userId},
+                where:{userId, readAt: null},
                 orderBy: {createdAt: "desc"}
             })
             res.json(notifications);

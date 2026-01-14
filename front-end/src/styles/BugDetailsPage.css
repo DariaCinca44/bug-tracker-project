@@ -102,3 +102,43 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* RIGHT ACTIONS GROUP */
+.action-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.assign-btn {
+  background: linear-gradient(90deg, #7a5af5, #4f46e5);
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  color: #0c0f1a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.assign-btn:hover {
+  opacity: 0.9;
+}
+
+.commit-input {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: white;
+  width: 220px;
+  outline: none;
+}
+
+.commit-input::placeholder {
+  color: #64748b;
+}
+
+.commit-input:focus {
+  border-color: #7a5af5;
+}
