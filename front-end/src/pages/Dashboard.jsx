@@ -9,6 +9,10 @@ function Dashboard() {
   const [userId, setUserId] = useState(null);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const XP_PER_LEVEL = 100;
+
+  const currentLevelXP = user ? user.xp % XP_PER_LEVEL : 0;
+  const progressPercent = (currentLevelXP / XP_PER_LEVEL) * 100;
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -96,16 +100,12 @@ useEffect(() => {
             <div className="xp-bar">
               <div
                 className="xp-fill"
-                style={{
-                  width: user
-                    ? `${Math.min((user.xp / 200) * 100, 100)}%`
-                    : "0%",
-                }}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
 
             <span className="xp-text">
-              {user ? `${user.xp} XP` : "0 XP"}
+              {currentLevelXP} / {XP_PER_LEVEL} XP
             </span>
           </div>
 

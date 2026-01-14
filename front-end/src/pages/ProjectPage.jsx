@@ -13,6 +13,10 @@ function ProjectPage() {
   const [user, setUser] = useState(null);
   const [project, setProject] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const XP_PER_LEVEL = 100;
+
+  const currentLevelXP = user ? user.xp % XP_PER_LEVEL : 0;
+  const progressPercent = (currentLevelXP / XP_PER_LEVEL) * 100;
 
 
   const openEditForm = () => {
@@ -147,7 +151,7 @@ useEffect(() => {
       <main className="main-content">
         <h1 className="main-title">Project  Bugs</h1>
         <p className="project-bugs-hint">
-          ⚠️pentru a vedea sectiunea de comentarii apasa pe Bug⚠️<br></br>
+          ⚠️To view the comments section, click on a bug⚠️<br></br>
         </p>
 
         {role===null && (
@@ -200,16 +204,13 @@ useEffect(() => {
       <div className="xp-bar">
         <div
           className="xp-fill"
-          style={{
-            width: user
-              ? `${Math.min((user.xp / 200) * 100, 100)}%`
-              : "0%",
-          }}
+          style={{ width: `${progressPercent}%` }}
         />
+
       </div>
 
         <span className="xp-text">
-          {user ? `${user.xp} XP` : "0 XP"}
+           {currentLevelXP} / {XP_PER_LEVEL} XP
         </span>
       </div>
 
