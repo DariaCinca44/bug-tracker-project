@@ -6,6 +6,7 @@
   background-color: #0c0f1a;
   color: white;
   font-family: "Inter", sans-serif;
+  overflow: hidden;
 }
 
 /* ---------------- SIDEBAR ---------------- */
@@ -41,9 +42,25 @@
   font-size: 15px;
   cursor: pointer;
   transition: 0.2s;
+  margin-bottom: 10px;
 }
 
 .sidebar-project-btn:hover {
+  background-color: #272b45;
+}
+.edit-project-btn{
+  background-color: #1b1e35;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-project-btn:hover {
   background-color: #272b45;
 }
 
@@ -67,6 +84,8 @@
 .main-content {
   flex: 1;
   padding: 40px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .main-title {
@@ -78,6 +97,8 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 
 .project-card {
@@ -221,4 +242,18 @@
   font-weight: bold;
   width: 100%;
   margin-bottom: 24px;
+}
+.delete-project-btn {
+  margin-top: 10px;
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-project-btn:hover {
+  background: #e63939;
 }

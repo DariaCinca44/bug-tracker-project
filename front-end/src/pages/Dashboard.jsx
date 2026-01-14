@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import "../styles/Dashboard.css";
+import { useNavigate } from "react-router-dom";
+
 
 function Dashboard() {
   const [projects, setProjects] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       window.location.href = "/";
@@ -20,6 +26,18 @@ function Dashboard() {
       console.log("Eroare la incarcare proiecte");
     });
 }, []);
+
+useEffect(() => {
+  api.get("/users/me")
+    .then(res => setUserId(res.data.id))
+    .catch(() => {});
+}, []);
+useEffect(() => {
+  api.get("/users/me")
+    .then(res => setUser(res.data))
+    .catch(() => {});
+}, []);
+
 
    const handleAddProject = async (e) => {
     e.preventDefault();
@@ -41,6 +59,20 @@ function Dashboard() {
       alert("Eroare la creare proiect");
     }
   };
+  const handleDeleteProject = async (e, projectId) => {
+  e.stopPropagation();
+
+  const ok = window.confirm("Sigur vrei sa stergi proiectul?");
+  if (!ok) return;
+
+  try {
+    await api.delete(`/projects/${projectId}`);
+    setProjects(projects.filter(p => p.id !== projectId));
+  } catch (err) {
+    alert(err.response?.data?.message || "Nu poti sterge acest proiect");
+  }
+};
+
   return (
     <div className="dashboard-container">
 
@@ -92,27 +124,54 @@ function Dashboard() {
               <h3>{project.name}</h3>
               <p>{project.description}</p>
               <span className="project-repo">{project.repoUrl}</span>
+          
+            {project.createdById === userId && (
+              <button
+                className="delete-project-btn"
+                onClick={(e) => handleDeleteProject(e, project.id)}
+              >
+                Delete
+              </button>
+            )}
             </div>
           ))}
-        </div>
+          </div>
+        
       </main>
 
       {/* RIGHT PANEL */}
       <aside className="right-panel">
 
         {/* USER XP BOX */}
-        <div className="user-box">
-          <h3 className="user-name">
-            {localStorage.getItem("username") || "User"}
-          </h3>
-          <p className="user-level">Level 3 — Bug Fixer</p>
+        <div
+            className="user-box"
+            onClick={() => navigate("/profile")}
+            style={{ cursor: "pointer" }}
+          >
+            <h3 className="user-name">
+              {user ? user.name : "User"}
+            </h3>
 
-          <div className="xp-bar">
-            <div className="xp-fill" style={{ width: "40%" }}></div>
+            <p className="user-level">
+              Level {user?.level}
+            </p>
+
+            <div className="xp-bar">
+              <div
+                className="xp-fill"
+                style={{
+                  width: user
+                    ? `${Math.min((user.xp / 200) * 100, 100)}%`
+                    : "0%",
+                }}
+              />
+            </div>
+
+            <span className="xp-text">
+              {user ? `${user.xp} XP` : "0 XP"}
+            </span>
           </div>
 
-          <span className="xp-text">60 XP / 200 XP</span>
-        </div>
 
         {/* NOTIFICATIONS */}
         <div className="notifications-box">

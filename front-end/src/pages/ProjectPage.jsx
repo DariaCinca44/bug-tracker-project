@@ -10,10 +10,19 @@ function ProjectPage() {
   const [bugs,setBugs] = useState([]);
   const [members, setMembers] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [project, setProject] = useState(null);
+
+  const openEditForm = () => {
+  navigate(`/project/${id}/edit`);
+};
 
   useEffect(() => {
     api.get("/users/me")
-      .then(res => setUserId(res.data.id))
+      .then(res => {
+      setUserId(res.data.id);
+      setUser(res.data);
+    })
       .catch(() => {});
   }, []);
 
@@ -45,22 +54,11 @@ function ProjectPage() {
     alert("Cannot promote user");
   }
 };
-
-  // const joinAsMP = async () => {
-  //   try {
-  //     await api.post(`/projects/${id}/join`, { role: "MP" });
-  //     setRole("MP");
-  //     alert("You are now a mp in this project!");
-  //   } catch {
-  //     alert("Cannot join as MP");
-  //   }
-  // };
-
-//aflam rol user
 useEffect(() => {
   if (!userId) return;
   api.get(`/projects/${id}`)
     .then(res => {
+      setProject(res.data);
       const member = res.data.members.find(m => m.user.id === userId);
       if (member) {
         setRole(member.role); // "MP" sau "TST"
@@ -98,7 +96,10 @@ useEffect(() => {
     <div className="dashboard-container">
       {/* SIDEBAR */}
       <aside className="sidebar">
-        <h3 className="sidebar-title">PROJECT {id}</h3>
+       <h1 className="sidebar-title">
+        {project ? project.name : "PROJECT"}
+      </h1>
+
 
         <button
           className="sidebar-project-btn"
@@ -106,27 +107,21 @@ useEffect(() => {
         >
           ⬅ Back to Dashboard
         </button>
-
+        {role === "MP" && (
+        <button
+          className="edit-project-btn"
+          onClick={openEditForm}
+        >
+          Edit Project
+        </button>
+   )}
         <div style={{ marginTop: "auto" }} />
-
+        
         {role === null && (
             <button onClick={joinAsTester} className="sidebar-add-btn">
               Join as Tester
             </button>
           )}
-
-          {/* {role === null && (
-            <button onClick={joinAsMP} className="sidebar-add-btn">
-              Join as MP
-            </button>
-          )} */}
-
-          {/* DACA ESTI MP
-          {role === "MP" && (
-            <button onClick={joinAsTester} className="sidebar-add-btn">
-              Join as Tester
-            </button>
-          )} */}
 
             {role === "TST" && (
                 <button
@@ -137,14 +132,6 @@ useEffect(() => {
                 </button>
           )}
           
-
-
-        {/* <button
-          className="sidebar-add-btn"
-          onClick={() => (window.location.href = `/project/${id}/add-bug`)}
-        >
-          + Add Bug
-        </button> */}
       </aside>
 
       {/* MAIN CONTENT */}
@@ -180,18 +167,35 @@ useEffect(() => {
 
       {/* RIGHT PANEL */}
       <aside className="right-panel">
-        <div className="user-box">
-          <h3 className="user-name">
-           User
-          </h3>
-          <p className="user-level">Level 3 — Bug Fixer</p>
+        <div
+      className="user-box"
+      onClick={() => navigate("/profile")}
+      style={{ cursor: "pointer" }}
+    >
+      <h3 className="user-name">
+        {user ? user.name : "User"}
+      </h3>
 
-          <div className="xp-bar">
-            <div className="xp-fill" style={{ width: "40%" }}></div>
-          </div>
+      <p className="user-level">
+        Level {user?.level}
+      </p>
 
-          <span className="xp-text">60 XP / 200 XP</span>
-        </div>
+      <div className="xp-bar">
+        <div
+          className="xp-fill"
+          style={{
+            width: user
+              ? `${Math.min((user.xp / 200) * 100, 100)}%`
+              : "0%",
+          }}
+        />
+      </div>
+
+        <span className="xp-text">
+          {user ? `${user.xp} XP` : "0 XP"}
+        </span>
+      </div>
+
         {role === "MP" && (
           <div className="user-box">
             <h3 className="notif-title">Project Members</h3>

@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "../styles/ProfilePage.css";
 
 function ProfilePage() {
 const [user, setUser] = useState(null);
+const navigate = useNavigate();
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("username"); // daca il mai folosesti undeva
+  navigate("/");
+};
 
   // protectie
   useEffect(() => {
@@ -59,31 +67,38 @@ const [user, setUser] = useState(null);
         </div>
       </div>
     <button
-      className="logout-button"
-      onClick={() => {
-        localStorage.removeItem("token");
-        window.location.href = "/";
-        }}
-      >
-        Deconectează-te
+      onClick={handleLogout}
+      className="logout-btn"
+    >
+      Logout
     </button>
+
 
       {/* PROIECTE */}
       <h2 className="projects-title">Projects</h2>
       <p className="projects-subtitle">Member of:</p>
 
       <div className="projects-list">
+        {user.projects.length === 0 && (
+          <p style={{ color: "gray" }}>No projects yet.</p>
+        )}
+
         {user.projects.map((project) => (
           <div key={project.id} className="project-card">
             <span>{project.name}</span>
-            <button className="details-button"onClick={() =>
-                (window.location.href = `/project/${project.id}`)
-              }>Vezi detalii</button>
+
+            <button
+              className="details-button"
+              onClick={() => navigate(`/project/${project.id}`)}
+            >
+              Vezi detalii
+            </button>
           </div>
         ))}
       </div>
-    </div>
+      </div>
   );
 }
+
  
 export default ProfilePage;

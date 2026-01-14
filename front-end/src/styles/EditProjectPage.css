@@ -1,0 +1,63 @@
+.edit-project-page {
+  padding: 32px;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #f1f1f1;
+}
+
+.edit-project-title {
+  font-size: 32px;
+  margin-bottom: 24px;
+}
+
+.edit-project-form {
+  background: #1f2233;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #b5b5c7;
+}
+
+.form-group input,
+.form-group textarea {
+  background: #2b2f4a;
+  border: 1px solid #3a3f5c;
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #6c63ff;
+}
+
+.submit-project-btn {
+  margin-top: 12px;
+  background: #6c63ff;
+  border: none;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.submit-project-btn:hover {
+  background: #5a52e0;
+}

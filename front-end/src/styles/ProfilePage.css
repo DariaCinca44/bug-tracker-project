@@ -1,10 +1,14 @@
 .profile-page {
-    position: relative;
+  position: relative;
   padding: 32px;
   max-width: 900px;
   margin: 0 auto;
   color: #f1f1f1;
+  overflow: hidden;
+  height: 100dvh;
+  box-sizing: border-box;
 }
+
 
 .profile-title {
   font-size: 32px;
@@ -82,10 +86,15 @@
 }
 
 .projects-list {
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
+  max-height: calc(100dvh - 520px);
+  padding-right: 6px;
+  padding-bottom: 12px;
 }
+
 
 .project-card {
   display: flex;
@@ -109,20 +118,18 @@
   background: #6c63ff;
   color: #fff;
 }
-.logout-button {
-    position: absolute;
-    top: 32px;
-    right: 32px;
-
-    background: transparent;
-    border: 1px solid #ff6b6b;
-    color: #ff6b6b;
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
+.logout-btn {
+  margin-top: 20px;
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.logout-button:hover {
-  background: #ff6b6b;
-  color: #fff;
+.logout-btn:hover {
+  background: #e63939;
 }
+
