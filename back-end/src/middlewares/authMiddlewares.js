@@ -1,6 +1,6 @@
 // middleware de autentificare si autorizare: 
 // - requireAuth: valideaza tokenul JWT si ataseaza utilizatorul in req.user
-// - requireRole: verifica daca utilizatorul are rolul MP/TST in proiect
+// - requireRole: verifica daca utilizatorul are un anumit rol intr-un proiect
 
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from "@prisma/client";

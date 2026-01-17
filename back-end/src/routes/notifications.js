@@ -1,3 +1,7 @@
+// acest fisier contine rute pentru gestionarea notificarilor utilizatorului:
+// - afisarea notificarilor necitite
+// - marcarea unei notificari ca fiind citita
+
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth } from "../middlewares/authMiddlewares.js";
@@ -7,7 +11,7 @@ const router = Router();
 
 //GET -> afiseaza notificarile pentru utilizatorul curent
 router
-    .get('/notifications', requireAuth, async( req, res, next)=>{
+    .get('/', requireAuth, async( req, res, next)=>{
         try{
             const userId= req.user.id;
 
@@ -22,7 +26,7 @@ router
     })
 
 // PATCH -> marcheaza notificarile ca si vizualizate
-    .patch('/notifications/:id/read', requireAuth, async (req,res,next)=>{
+    .patch('/:id/read', requireAuth, async (req,res,next)=>{
         try{
             const {id} = req.params;
             const userId = req.user.id;

@@ -1,3 +1,9 @@
+// acest fisier contine rute pentru gestionarea comentariilor unui bug:
+// - afisarea comentariilor unui bug
+// - adaugarea unui comentariu nou
+// - editarea unui comentariu (doar autorul)
+// - stergerea unui comentariu (doar autorul)
+
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth } from "../middlewares/authMiddlewares.js";
@@ -124,7 +130,7 @@ router
         }
     })
 
-//DELETE -> stergerea unui comentarii doar de catre utilizatorul care l-a postat
+//DELETE -> stergerea unui comentariu doar de catre utilizatorul care l-a postat
     .delete("/comments/:commentId", requireAuth, async(req, res, next)=>{
         try{
             const {commentId} = req.params;

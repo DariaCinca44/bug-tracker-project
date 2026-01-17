@@ -1,6 +1,6 @@
-// acest fisier contine rute pentru autentificare si gestionarea propriului cont:
-// - /auth/register -> creare cont nou
-// - /auth/login -> autentificare si generare JWT
+// acest fisier contine rute pentru autentificare:
+// - crearea unui cont nou
+// - autentificarea utilizatorului si generarea unui token JWT
 
 import { Router } from "express";
 import bcrypt from 'bcrypt';
@@ -41,7 +41,7 @@ router
             }
         })
 
-        res.status(201).json({message: 'User created!', user}); 
+        res.status(201).json({message: 'User created!'}); 
     } catch (err){
         next(err);
     }

@@ -1,9 +1,8 @@
 // acest fisier contine rute pentru gestionarea bug-urilor:
 // - crearea unui bug de catre TST
-// - listarea bug-urilor intr-un proiect
+// - vizualizarea unui bug
 // - asignarea unui bug ca MP
 // - schimbarea statusului unui bug ca MP
-// - editarea detaliilor unui bug ca MP/TST
 
 import { Router } from "express";
 import { requireAuth } from "../middlewares/authMiddlewares.js";
@@ -57,67 +56,36 @@ router
         }       
     })
 
-// GET BUGS -> din proiecte, ca MP/TST
+    .get('/bug/:bugId', requireAuth, async (req, res, next) => {
+        try {
+            const { bugId } = req.params;
+            const userId = req.user.id;
 
-    .get('/projects/:projectId/bugs', requireAuth, async (req, res, next)=>{
-        try{
-            const {projectId} = req.params;
-            const {status} = req.query;
-            const userId= req.user.id;
+            const bug = await prisma.bug.findUnique({
+                where: { id: bugId },
+            });
 
-            const memberProject= await prisma.projectMember.findFirst({
-                where: {projectId, userId}
-            })
-
-            if(!memberProject){
-                throw {status: 403, message: 'You do not have access to this project'};
+            if (!bug) {
+                throw { status: 404, message: 'Bug not found' };
             }
 
-            const bugs = await prisma.bug.findMany({
-                where: status ? {projectId, status} : {projectId},
-                include: {
-                    assigned: {
-                    select: { id: true, name: true }
-                    }
+            // verificam ca userul face parte din proiect
+            const member = await prisma.projectMember.findFirst({
+            where: {
+                userId,
+                projectId: bug.projectId,
                 },
-                orderBy: { createdAt: "desc" }
-            })
-            res.json(bugs);
-        } catch (err){
+            });
+
+            if (!member) {
+                throw { status: 403, message: 'Access denied to this bug' };
+            }
+
+            res.json(bug);
+        } catch (err) {
             next(err);
         }
     })
-
-    .get('/bug/:bugId', requireAuth, async (req, res, next) => {
-  try {
-    const { bugId } = req.params;
-    const userId = req.user.id;
-
-    const bug = await prisma.bug.findUnique({
-      where: { id: bugId },
-    });
-
-    if (!bug) {
-      throw { status: 404, message: 'Bug not found' };
-    }
-
-    // verificam ca userul face parte din proiect
-    const member = await prisma.projectMember.findFirst({
-      where: {
-        userId,
-        projectId: bug.projectId,
-      },
-    });
-
-    if (!member) {
-      throw { status: 403, message: 'Access denied to this bug' };
-    }
-
-    res.json(bug);
-  } catch (err) {
-    next(err);
-  }
-})
 
 
 // ASSIGN BUG -> doar MP 
@@ -263,81 +231,6 @@ router
             }
             res.json(updated);
         }catch(err){
-            next(err);
-        }
-    })
-
-// UPDATE DETAILS -> TST/MP updateaza informatiile bug-ului
-
-    .patch('/:bugId', requireAuth, async(req, res, next)=>{
-        try{
-            const {bugId} = req.params;
-            const {title, description, severity, priority} = req.body;
-            const userId= req.user.id;
-
-            const bug= await prisma.bug.findUnique({
-                where: {id:bugId}
-            })
-            if(!bug){
-                throw{status: 404, message: 'Bug not found'};
-            }
-
-            const member= await prisma.projectMember.findFirst({
-                where: {userId, projectId: bug.projectId}
-            })
-            if(!member){
-                throw {status: 403, message: 'You are not a member of this project'};
-            }
-
-            const updated= await prisma.bug.update({
-                where: {id: bugId},
-                data:{
-                    title,
-                    description,
-                    severity,
-                    priority
-                }
-            })
-            res.json(updated);
-        }catch(err){
-            next(err);
-        }
-    })
-
-//GET STATUS HISTORY -> afiseaza istoricul statusurilor fiecarui bug
-    .get('/:bugId/status-history', requireAuth, async (req, res, next)=>{
-        try{
-            const {bugId} = req.params;
-            const userId = req.user.id;
-
-            const bug = await prisma.bug.findUnique({
-                where: {id: bugId},
-            })
-            if(!bug){
-                throw {status: 404, message: "Bug not found"};
-            }
-
-            const member = await prisma.projectMember. findFirst({
-                where: {
-                    userId,
-                    projectId: bug.projectId
-                }
-            })
-            if(!member){
-                throw{status: 403, message: "Access denied"}
-            }
-
-            const history = await prisma.bugStatusHistory.findMany({
-                where: {bugId},
-                include: {
-                    changedBy: {
-                        select : {id:true, name: true}
-                    }
-                },
-                orderBy : {createdAt: "asc"}
-            })
-            res.json(history);
-        } catch(err){
             next(err);
         }
     })

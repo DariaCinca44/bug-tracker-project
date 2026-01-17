@@ -1,3 +1,8 @@
+// acest fisier contine logica pentru gestionarea experientei utilizatorilor:
+// - adaugarea de XP in urma unor actiuni
+// - calcularea automata a nivelului utilizatorului
+// - inregistrarea istoricului modificarilor de XP
+
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();

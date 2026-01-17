@@ -1,8 +1,9 @@
-// acest fisier contine rute pentru managementul proiectelor:
-// - POST /projects -> crearea unui proiect nou (userul va deveni automat MP)
-// - POST /projects/:id/join -> userul se alatura ca TST
-// - PATCH /projects/:id -> MP actualizeaza datele proiectului
-// - DELETE /projects/:id -> MP sterge proiectul
+// acest fisier contine rute pentru gestionarea proiectelor:
+// - crearea si stergerea proiectelor
+// - aderarea si parasirea unui proiect
+// - actualizarea informatiilor unui proiect
+// - gestionarea membrilor unui proiect
+// - afisarea bug-urilor asociate unui proiect
 
 import { Router } from "express";
 import { requireAuth } from "../middlewares/authMiddlewares.js";
@@ -292,7 +293,7 @@ router.get("/:id/bugs", requireAuth, async (req, res) => {
 
     res.json(bugs);
   } catch (err) {
-    res.status(500).json({ message: "Cannot load bugs" });
+    next(err);
   }
 });
 
